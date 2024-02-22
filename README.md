@@ -2,19 +2,21 @@ This is a GraphQL TODO project created with Next.js
 
 ## Getting Started
 
-First, install the required dependencies:
+Step 1: clone the git repository:
+
+```bash
+git clone https://github.com/pawandai/graphql_todo.git
+```
+
+Step 2: Install required dependencies
 
 ```bash
 npm install
 ```
 
-or
-
 ```bash
 pnpm install
 ```
-
-or
 
 ```bash
 yarn
