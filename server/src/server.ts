@@ -3,7 +3,7 @@ import cors from 'cors'
 import 'dotenv/config'
 import mongoose from "mongoose"
 import {schema} from "./schema/typeDefs";
-import {createHandler} from "graphql-http"
+import {graphqlHTTP} from "express-graphql"
 
 const databaseUrl = process.env.DATABASE_URL
 
@@ -20,5 +20,11 @@ mongoose.connect(databaseUrl as string, {
     dbName: "Database"
 }).then(() => console.log("Successfully connected to database"))
 
-app.all('/graphql', createHandler({schema}))
+app.use(
+    '/graphql',
+    graphqlHTTP({
+        schema,
+        graphiql: process.env.NODE_ENV === 'development',
+    })
+);
 

@@ -1,5 +1,5 @@
-import {GraphQLBoolean, GraphQLID, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString} from "graphql/type";
-import Todo from "./todoModel";
+import {GraphQLBoolean, GraphQLID, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString} from 'graphql';
+import Todo from './todoModel';
 
 const todoType = new GraphQLObjectType({
     name: 'Todo',
@@ -8,65 +8,71 @@ const todoType = new GraphQLObjectType({
         title: {type: GraphQLString},
         completed: {type: GraphQLBoolean},
     }),
-})
+});
 
 const query = new GraphQLObjectType({
-    name: 'queryType',
+    name: 'Query',
     fields: {
         getTodos: {
             type: new GraphQLList(todoType),
             resolve(parent, args) {
-                return Todo.find()
-            }
-        }
-    }
-})
+                return Todo.find();
+            },
+        },
+    },
+});
 
 const mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        // Get todos from database
         addTodo: {
             type: todoType,
             args: {
                 title: {type: GraphQLString},
-                completed: {type: GraphQLBoolean}
+                completed: {type: GraphQLBoolean},
             },
             resolve(parent, args) {
                 const todo = new Todo({
                     title: args.title,
-                    completed: args.completed
-                })
+                    completed: args.completed,
+                });
 
-                return todo.save()
-            }
+                return todo.save();
+            },
         },
-        // update todos
         updateTodo: {
             type: todoType,
             args: {
                 id: {type: GraphQLID},
                 title: {type: GraphQLString},
-                completed: {type: GraphQLBoolean}
+                completed: {type: GraphQLBoolean},
             },
             resolve(parent, args) {
-                return Todo.findByIdAndUpdate(args.id, {
-                    $set: {
-                        title: args.title,
-                        completed: args.completed
-                    }
-                }, {new: true})
-            }
+                return Todo.findByIdAndUpdate(
+                    args.id,
+                    {
+                        $set: {
+                            title: args.title,
+                            completed: args.completed,
+                        },
+                    },
+                    {new: true}
+                );
+            },
         },
-        //     delete todos
-        deleteTodos: {
-            type: todoType,
+        deleteTodo: {
+            type: GraphQLString, // Return a message indicating success/failure
             args: {id: {type: GraphQLID}},
-            resolve(parent, args) {
-                Todo.findByIdAndDelete(args.id)
-            }
-        }
-    }
-})
+            async resolve(parent, args) {
+                try {
+                    await Todo.findByIdAndDelete(args.id);
+                    return 'Todo deleted successfully';
+                } catch (error) {
+                    throw new Error('Failed to delete todo');
+                }
+            },
+        },
+    },
+});
 
-export const schema = new GraphQLSchema({query, mutation})
+export const schema = new GraphQLSchema({query, mutation});

@@ -1,13 +1,16 @@
-import {gql} from "@apollo/client";
+import {ApolloClient, gql, InMemoryCache} from '@apollo/client';
 
-const GET_TODOS = gql`
-    query getTodos {
-        todos {
+export const client = new ApolloClient({
+    uri: 'http://localhost:3000/graphql',
+    cache: new InMemoryCache(),
+});
+
+export const GET_TODOS = gql`
+    query {
+        getTodos {
             id
             title
             completed
         }
     }
-`
-
-export {GET_TODOS}
+`;
