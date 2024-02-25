@@ -19,7 +19,7 @@ const DELETE_TODO = gql`
 `;
 
 const UPDATE_TODO = gql`
-    mutation updateTodo(
+    mutation UpdateTodo(
         $id: ID
         $title: String
         $completed: Boolean
