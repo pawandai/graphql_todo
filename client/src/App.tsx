@@ -2,6 +2,8 @@ import TodoCard from "./components/shared/TodoCard";
 import MaxWidthWrapper from "./components/utils/MaxWidthWrapper";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useQuery } from "@apollo/client";
+import { GET_TODOS } from "@/queries/todoQuery.ts";
 
 export type todoType = {
   id: string;
@@ -11,12 +13,11 @@ export type todoType = {
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const loading = false;
-  // const { loading, error, data } = useQuery(GET_TODOS);
-  //
-  // setTodos(data);
-  //
-  // if (error) return <p>Something Went wrong</p>;
+  const { loading, error, data } = useQuery(GET_TODOS);
+
+  setTodos(data);
+
+  if (error) return <p>Something Went wrong</p>;
 
   return (
     <>
